@@ -1,83 +1,626 @@
-# Java is Compiled and Interpreted
+# Java Programming Guide
 
-Java Compiler converts Java source code (file with extension `.java`) to bytecode (file with extension `.class`). Bytecode is an intermediate form, closer to machine representation. An Interpreter (virtual machine) on any target platform interprets the bytecode. Porting a Java system to any new platform involves writing an interpreter. The interpreter will figure out the equivalent machine-dependent code to run.
+## Course Outline
+1. Identifiers, Data Types, Variables and Constants
+2. Operators and Expressions
+3. Flow of Control
+4. Classes, Objects
+5. Defining a Class, Using a Class
+6. Getters, Setters and Constructors
+7. Static Attributes and Methods
+8. Standard Methods in Java
+9. Array Initialization and Assignment
+10. Strings
+11. Introducing Java Packages, Information Hiding
+12. Delegation through Association
+13. Wrapper Classes
+14. Input Output
+15. Interfaces
+16. Representing a Class in UML
+17. Collections and Maps
+18. Type Parameters, Bounded Type Parameters
+19. Design Patterns
+20. Exception Handling, Chaining Exceptions
+21. Enumerated Types, Variadic Parameters, Functional Interfaces, Lambda Expressions, Method References, Streams
 
-## Java Features
+---
 
-- Compiled and Interpreted
-- Platform-Independent and Portable
-- Object-Oriented
+## 1. Identifiers, Data Types, Variables and Constants
 
-## Object-Oriented
+### Identifiers
+- Names given to classes, variables, and methods.
+- Must begin with a letter, dollar sign `$`, or underscore `_`.
+- Cannot use Java reserved words.
 
-Java is an Object-Oriented Programming (OOP) language. Common programming constructs are: Classes, Objects, Methods, etc. We will learn more in the coming lectures.
+### Data Types
+- Primitive: `int`, `char`, `double`, `boolean`, etc.
+- Non-primitive (Reference): `String`, `Arrays`, `Classes`, etc.
 
-# Hello World - Line by Line
-
+### Variables
+- Containers for storing data values.
+- Example:
 ```java
-// HelloWorld.java: Display "Hello World!" on the screen
-import java.lang.*;
+int age = 25;
+double salary = 50000.75;
+char grade = 'A';
+boolean isEmployed = true;
+```
 
-public class HelloWorld {
-    public static void main(String args[]) {
-        System.out.println("Hello World!");
-        return;
+### Constants
+- Immutable variables declared using `final`.
+- Example:
+```java
+final int DAYS_IN_WEEK = 7;
+```
+
+---
+
+## 2. Operators and Expressions
+
+### Types of Operators
+- Arithmetic Operators: `+`, `-`, `*`, `/`, `%`
+- Relational Operators: `==`, `!=`, `>`, `<`, `>=`, `<=`
+- Logical Operators: `&&`, `||`, `!`
+- Assignment Operators: `=`, `+=`, `-=`, etc.
+
+### Expressions
+- Combination of operators and operands.
+```java
+int result = (10 + 5) * 2;
+boolean isEqual = (5 == 3);
+```
+
+---
+
+## 3. Flow of Control
+
+### If-Else Statement
+```java
+int num = 10;
+if (num > 0) {
+    System.out.println("Positive number");
+} else {
+    System.out.println("Negative number");
+}
+```
+
+### Switch Statement
+```java
+int day = 2;
+switch (day) {
+    case 1: System.out.println("Monday"); break;
+    case 2: System.out.println("Tuesday"); break;
+    default: System.out.println("Other day");
+}
+```
+
+### Loops
+#### For Loop
+```java
+for (int i = 0; i < 5; i++) {
+    System.out.println(i);
+}
+```
+
+#### While Loop
+```java
+int i = 0;
+while (i < 5) {
+    System.out.println(i);
+    i++;
+}
+```
+
+### Do-While Loop
+```java
+int i = 0;
+do {
+    System.out.println(i);
+    i++;
+} while (i < 5);
+```
+
+---
+
+## 4. Classes, Objects
+
+### Class
+- Blueprint for objects.
+- Define properties (fields) and methods (functions).
+
+### Object
+- Instance of a class.
+- Example:
+```java
+class Dog {
+    String name;
+    int age;
+    void bark() {
+        System.out.println("Woof!");
+    }
+}
+
+Dog myDog = new Dog();
+myDog.name = "Buddy";
+myDog.age = 3;
+myDog.bark();  // Output: Woof!
+```
+
+---
+
+## 5. Defining a Class, Using a Class
+
+### Defining a Class
+```java
+public class Person {
+    String name;
+    int age;
+}
+```
+
+### Using a Class
+```java
+public class Main {
+    public static void main(String[] args) {
+        Person person = new Person();
+        person.name = "Alice";
+        person.age = 30;
+        System.out.println(person.name + " is " + person.age + " years old.");
     }
 }
 ```
 
-## Line 1:
+---
 
-This is a comment in Java, similar to line 1 of the C program. Java supports 3 types of comments:
-- `/* */` - Usually used for multi-line comments, similar to C.
-- `//` - Used for single-line comments.
-- `/** */` - Documentation comments, will learn more later.
+## 6. Getters, Setters and Constructors
 
-## Line 2: import java.lang.*;
+### Getters and Setters
+```java
+public class Person {
+    private String name;
+    private int age;
 
-Serves the same purpose as the `#include` statement used in C. It is used to import additional classes (similar to libraries used in C). In Java, classes are grouped into packages. Packages may be defined by different people and may even have the same class and method names, but they differ by package name (will learn more later): e.g., `ibm.mathlib.*`, `microsoft.mathlib.*`. By default, Java imports the `java.lang.*` package; therefore, this statement is optional.
+    public String getName() {
+        return name;
+    }
 
-## Line 3: public class HelloWorld {
+    public void setName(String name) {
+        this.name = name;
+    }
 
-Class definition - in Java everything is defined in a class (we will learn more about classes and the keyword `public` later). The name of the class must be the same as the Java file name (HelloWorld class must be saved in a file `HelloWorld.java`).
+    public int getAge() {
+        return age;
+    }
 
-## Line 4: public static void main(String args[])
+    public void setAge(int age) {
+        this.age = age;
+    }
+}
+```
 
-Definition of the `main` method, very similar to C. A standalone Java program must have a `main` method. A class can have only one `main()` method. We will learn about the keywords `public` and `static` later. `String args[]` defines command line arguments, similar to C.
+### Constructors
+```java
+public class Person {
+    private String name;
+    private int age;
 
-## Line 5: System.out.println("Hello World!");
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+}
+```
 
-Serves the same purpose as the `printf` function in C, except `println` is called a method, as opposed to a function in C. `System.out`: `out` is an object in the class `System`; this class is defined in the `java.lang` package. You will learn more about classes, objects, methods, and packages in the coming lectures.
+---
 
-## Line 6: return
+## 7. Static Attributes and Methods
 
-This is optional, and usually not included, just included here for comparison with C.
+### Static Attributes
+```java
+public class Person {
+    public static int personCount = 0;
+    public String name;
 
-# Writing and Running the Java Program
+    public Person(String name) {
+        this.name = name;
+        personCount++;
+    }
+}
+```
 
-1. Write the Java program using a text editor (e.g., Notepad, Vim), and save it in a file `HelloWorld.java`. You will learn to use an Integrated Development Environment (IDE) later.
-2. Ensure that the Java build and runtime environment is installed on the machine.
-    - Open a command window and type the commands:
-      ```shell
-      javac -version
-      java -version
-      ```
-3. Compile the program using the following command:
-    ```shell
-    javac HelloWorld.java
-    ```
-    The command, if successful, will generate a file `HelloWorld.class`.
-4. Run the program using the following command:
-    ```shell
-    java HelloWorld
-    ```
-    You should see the following output.
+### Static Methods
+```java
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("Person count: " + Person.personCount);
+        Person p1 = new Person("Alice");
+        Person p2 = new Person("Bob");
+        System.out.println("Person count: " + Person.personCount);
+    }
+}
+```
 
-    If you run `java HelloWorld` with command line arguments as follows:
-    ```shell
-    java HelloWorld Australia England France
-    ```
-    `args[]` (defined in `public static void main(String args[])`) will contain the command line arguments:
-    - `args[0]` -> `Australia`
-    - `args[1]` -> `England`
-    - `args[2]` -> `France`
+---
+
+## 8. Standard Methods in Java
+
+### toString Method
+```java
+public class Person {
+    private String name;
+    private int age;
+
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    @Override
+    public String toString() {
+        return "Person{name='" + name + "', age=" + age + "}";
+    }
+}
+```
+
+### equals Method
+```java
+@Override
+public boolean equals(Object obj) {
+    if (this == obj) return true;
+    if (obj == null || getClass() != obj.getClass()) return false;
+    Person person = (Person) obj;
+    return age == person.age && Objects.equals(name, person.name);
+}
+```
+
+### hashCode Method
+```java
+@Override
+public int hashCode() {
+    return Objects.hash(name, age);
+}
+```
+
+---
+
+## 9. Array Initialization and Assignment
+
+### Initializing Arrays
+```java
+int[] numbers = new int[5];
+int[] primes = {2, 3, 5, 7, 11};
+```
+
+### Accessing Array Elements
+```java
+numbers[0] = 1;
+int firstPrime = primes[0];
+```
+
+---
+
+## 10. Strings
+
+### String Declaration
+```java
+String message = "Hello, World!";
+System.out.println(message);
+```
+
+### Common String Methods
+```java
+String str = "Hello, World!";
+System.out.println(str.length());
+System.out.println(str.charAt(0));
+System.out.println(str.substring(7));
+System.out.println(str.toUpperCase());
+```
+
+---
+
+## 11. Introducing Java Packages, Information Hiding
+
+### Packages
+- Group related classes and interfaces.
+```java
+package com.example;
+
+public class Person {
+    private String name;
+    private int age;
+}
+```
+
+### Information Hiding
+- Use private access to restrict access to class members.
+
+---
+
+## 12. Delegation through Association
+
+### Association Example
+```java
+class Address {
+    String city;
+    String state;
+}
+
+class Employee {
+    String name;
+    Address address;
+
+    Employee(String name, Address address) {
+        this.name = name;
+        this.address = address;
+    }
+}
+```
+
+---
+
+## 13. Wrapper Classes
+
+### Common Wrapper Classes
+- Integer, Double, Character, Boolean
+```java
+int num = 5;
+Integer numWrapper = Integer.valueOf(num);
+int unwrappedNum = numWrapper.intValue();
+```
+
+---
+
+## 14. Input Output
+
+### Reading Console Input
+```java
+import java.util.Scanner;
+
+public class InputExample {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        System.out.print("Enter a number: ");
+        int num = scanner.nextInt();
+        
+        System.out.println("You entered: " + num);
+    }
+}
+```
+
+### Writing to a File
+```java
+import java.io.FileWriter;
+import java.io.IOException;
+
+public class WriteFile {
+    public static void main(String[] args) {
+        try {
+            FileWriter writer = new FileWriter("output.txt");
+            writer.write("Hello, File!");
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+---
+
+## 15. Interfaces
+
+### Defining an Interface
+```java
+interface Animal {
+    void sound();
+}
+
+class Dog implements Animal {
+    public void sound() {
+        System.out.println("Woof");
+    }
+}
+```
+
+---
+
+## 16. Representing a Class in UML
+
+### UML Class Diagram
+```
++-----------------+
+|     Person      |
++-----------------+
+| - name: String  |
+| - age: int      |
++-----------------+
+| + getName(): String |
+| + setName(name: String) |
+| + getAge(): int |
+| + setAge(age: int)  |
++-----------------+
+```
+
+---
+
+## 17. Collections and Maps
+
+### List Example
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+public class ListExample {
+    public static void main(String[] args) {
+        List<String> names = new ArrayList<>();
+        names.add("Alice");
+        names.add("Bob");
+        
+        for (String name : names) {
+            System.out.println(name);
+        }
+    }
+}
+```
+
+### Map Example
+```java
+import java.util.HashMap;
+import java.util.Map;
+
+public class MapExample {
+    public static void main(String[] args) {
+        Map<String, Integer> map = new HashMap<>();
+        map.put("Alice", 30);
+        map.put("Bob", 25);
+        
+        for (Map.Entry<String, Integer> entry : map.entrySet()) {
+            System.out.println(entry.getKey() + ": " + entry.getValue());
+        }
+    }
+}
+```
+
+---
+
+## 18. Type Parameters, Bounded Type Parameters
+
+### Generic Class
+```java
+class Box<T> {
+    private T t;
+
+    public void set(T t) {
+        this.t = t;
+    }
+
+    public T get() {
+        return t;
+    }
+}
+```
+
+### Bounded Type Parameters
+```java
+class Box<T extends Number> {
+    private T t;
+
+    public void set(T t) {
+        this.t = t;
+    }
+
+    public T get() {
+        return t;
+    }
+}
+```
+
+---
+
+## 19. Design Patterns
+
+### Singleton Pattern
+```java
+public class Singleton {
+    private static Singleton instance;
+
+    private Singleton() {}
+
+    public static Singleton getInstance() {
+        if (instance == null) {
+            instance = new Singleton();
+        }
+        return instance;
+    }
+}
+```
+
+---
+
+## 20. Exception Handling, Chaining Exceptions
+
+### Try-Catch Block
+```java
+try {
+    int data = 50 / 0;  // This will cause an ArithmeticException
+} catch (ArithmeticException e) {
+    System.out.println("Cannot divide by zero");
+}
+```
+
+### Chaining Exceptions
+```java
+class CustomException extends Exception {
+    CustomException(String message, Throwable cause) {
+        super(message, cause);
+    }
+}
+
+try {
+    // Some code that throws an exception
+} catch (IOException e) {
+    throw new CustomException("Custom Exception occurred", e);
+}
+```
+
+---
+
+## 21. Enumerated Types, Variadic Parameters, Functional Interfaces, Lambda Expressions, Method References, Streams
+
+### Enumerated Types
+```java
+enum Day {
+    MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY
+}
+```
+
+### Variadic Parameters
+```java
+public void printNumbers(int... numbers) {
+    for (int num : numbers) {
+        System.out.println(num);
+    }
+}
+```
+
+### Functional Interfaces
+```java
+@FunctionalInterface
+interface MyFunctionalInterface {
+    void execute();
+}
+```
+
+### Lambda Expressions
+```java
+MyFunctionalInterface func = () -> System.out.println("Hello, Lambda!");
+func.execute();
+```
+
+### Method References
+```java
+public class MethodReferenceExample {
+    public static void greet() {
+        System.out.println("Hello!");
+    }
+
+    public static void main(String[] args) {
+        MyFunctionalInterface func = MethodReferenceExample::greet;
+        func.execute();
+    }
+}
+```
+
+### Streams
+```java
+import java.util.Arrays;
+import java.util.List;
+
+public class StreamExample {
+    public static void main(String[] args) {
+        List<String> list = Arrays.asList("a", "b", "c");
+        list.stream().forEach(System.out::println);
+    }
+}
+```

@@ -1630,80 +1630,131 @@ These are special forms of association that describe different levels of depende
 UML is a powerful tool for representing object-oriented designs through class diagrams. It helps developers visualize the structure and relationships between classes, attributes, methods, and their interactions. Understanding UML relationships—such as **association**, **generalization**, **realization**, and **dependency**—is key to designing clear and maintainable software systems.
 
 ## 17. Collections and Maps
+### **Collections**  
+A framework that permits storing, accessing, and manipulating **lists** (an ordered collection).  
 
-### List Example
-```java
-import java.util.ArrayList;
-import java.util.List;
+### **Maps**  
+A framework that permits storing, accessing, and manipulating **key-value pairs**.  
 
-public class ListExample {
-    public static void main(String[] args) {
-        List<String> names = new ArrayList<>();
-        names.add("Alice");
-        names.add("Bob");
-        
-        for (String name : names) {
-            System.out.println(name);
-        }
-    }
-}
-```
 
-### Map Example
-```java
-import java.util.HashMap;
-import java.util.Map;
+### **Using the ArrayList Class for Storing Data**  
+- `ArrayList` can be used to store different types of objects, provided they inherit the same base class.  
+- Technically, this means `ArrayList` is not designed for entirely different types of objects.  
+- `ArrayList` is a class in the Java Collections framework that allows storing, retrieving, and manipulating a group of objects.  
 
-public class MapExample {
-    public static void main(String[] args) {
-        Map<String, Integer> map = new HashMap<>();
-        map.put("Alice", 30);
-        map.put("Bob", 25);
-        
-        for (Map.Entry<String, Integer> entry : map.entrySet()) {
-            System.out.println(entry.getKey() + ": " + entry.getValue());
-        }
-    }
-}
-```
 
----
+## **Comparing Collection Types**  
+
+Each of these collection types has useful applications:  
+
+- **ArrayList** → Like arrays, but better.  
+- **HashSet** → Ensures elements are unique (no duplicates).  
+- **PriorityQueue** → Allows ordering of elements in non-trivial ways.  
+- **TreeSet** → Provides fast lookup/search of unique elements.  
 
 ## 18. Type Parameters, Bounded Type Parameters
 
-### Generic Class
-```java
-class Box<T> {
-    private T t;
+## **Generics in Java**  
 
-    public void set(T t) {
-        this.t = t;
-    }
+Java allows **class, interface, or method definitions** to include **parameter types**. These definitions are called **generics**, which:  
 
-    public T get() {
-        return t;
-    }
-}
-```
+- Enable **generic logic** to be written that applies to **any class type**.  
+- Allow **code reusability**.  
 
-### Bounded Type Parameters
-```java
-class Box<T extends Number> {
-    private T t;
-
-    public void set(T t) {
-        this.t = t;
-    }
-
-    public T get() {
-        return t;
-    }
-}
-```
+We will first learn **how to use generically typed classes**, and then how to **write generically typed classes**.  
 
 ---
 
+## **Comparable Interface**  
+
+### **Definition of the Comparable Interface**  
+```java
+public interface Comparable<T> {  
+    public int compareTo(T other);  
+}
+```
+### **What does `T` mean?**  
+
+#### **Type Parameters**  
+- `T` is a **type parameter** (or **type variable**).  
+- When `T` is given a **specific type**, every instance of the placeholder variable **is replaced** with that type.  
+- The value of `T` is literally a **class/interface type**, such as:  
+  - `Integer`  
+  - `String`  
+  - `Robot`  
+  - `Book`  
+  - `Driveable`  
+
+### **Implementing the Comparable Interface**  
+Whoever implements the interface must provide the type:  
+```java
+public class Robot implements Comparable<Robot> { ... }  
+public class Book implements Comparable<Book> { ... }  
+public class Dog implements Comparable<Dog> { ... }  
+```
+---
+
+## **Why Use Type Parameters?**  
+
+Using **type parameters** allows us to define a **class or method** that works with **arbitrary, generic types**, making it applicable to **any and all types**.  
+
+# **Defining a Generic Class**  
+
+### **Keyword: Generic Class**  
+A **generic class** is a class defined with an **arbitrary type** for:  
+- A **field**  
+- A **parameter**  
+- A **return type**  
+
+### **Characteristics of a Generic Class**  
+- The **type parameter** is included in **angular brackets** (`<>`) after the class name in the class definition.  
+- A **type parameter** can have **any reference type** (i.e., any class type).  
+- Traditionally, a **single uppercase letter** (e.g., `T`) is used as a type parameter, but **any valid identifier** (non-keyword) can be used.  
+- A **generic class** is stored and compiled just like any other class.  
+
+---
+
+## **Bounded Type Parameters**  
+
+Sometimes, we need to **guarantee a class’s behavior**, so we apply **bounds** to type parameters.  
+
+### **Syntax for Bounded Type Parameters**  
+```java
+public class Generic<T extends <class, interface...>> { }  
+```
+Examples:  
+```java
+public class Generic<T extends Comparable<T>> { }  // T must implement Comparable  
+public class Generic<T extends Robot> { }          // T must be a subclass of Robot  
+public class Generic<T extends Robot & Comparable<T> & List<T>> { }  
+// T must be a subclass of Robot AND implement Comparable & List  
+```
+---
+
+# **Generic Methods**  
+
+### **Keyword: Generic Method**  
+A **generic method** is a method that accepts arguments or returns objects of an **arbitrary type**.  
+
+- A **generic method** can be defined in **any class** (generic or non-generic).  
+- The **type parameter** (e.g., `T`) is **local** to the method.  
+
+### **Examples of Generic Methods**  
+```java
+public <T> int genericMethod(T arg);         // Accepts a generic argument  
+public <T> T genericMethod(String name);     // Returns a generic type  
+public <T> T genericMethod(T arg);           // Accepts and returns the same generic type  
+public <T, S> T genericMethod(S arg);        // Uses two different generic types  
+```
+
 ## 19. Design Patterns
+
+### **What is a Software Design Pattern?**  
+A **Software Design Pattern** is a **description of a solution** to a **recurring problem** in software design.  
+
+### **Why Use Design Patterns?**  
+- Recurring problems in software design make these solutions **valuable** to developers.  
+- Documenting solutions as **patterns** allows developers to **reuse** them instead of **reinventing the wheel**.  
 
 ### Singleton Pattern
 ```java
@@ -1725,12 +1776,66 @@ public class Singleton {
 
 ## 20. Exception Handling, Chaining Exceptions
 
-### Try-Catch Block
+## **Types of Errors**  
+
+### **1. Syntax Errors**  
+**Definition:** Errors where the written code is not **valid Java syntax**.  
+- Identified by the **editor/compiler**.  
+- Prevents the program from compiling.  
+- Example:  
+  ```java
+  int x = "hello";  // Error: Type mismatch (String assigned to an int)
+  ```
+
+### **2. Semantic Errors**  
+**Definition:** The program **runs** but produces **incorrect output** or behaves unexpectedly.  
+- Identified through **software testing**.  
+- Example:  
+  ```java
+  int x = 5 / 2;  
+  System.out.println(x);  // Output: 2 (Integer division, expected 2.5)
+  ```
+
+### **3. Runtime Errors**  
+**Definition:** Errors that cause the program to **crash** during execution.  
+- Identified when the program **runs**.  
+- Example:  
+  ```java
+  int[] arr = new int[5];  
+  System.out.println(arr[10]);  // Error: ArrayIndexOutOfBoundsException
+  ```
+
+---
+
+## **Common Runtime Errors**  
+
+- **Dividing a number by zero** (`ArithmeticException`)  
+- **Accessing an array element out of bounds** (`ArrayIndexOutOfBoundsException`)  
+- **Storing incompatible data types** (e.g., assigning a `String` to an `int`)  
+- **Using a negative value as an array size**  
+- **Invalid type conversions** (e.g., converting `"abc"` to an `int`)  
+
+### **File Errors**
+- **Opening a file in "read mode" that does not exist** or lacks permission  
+- **Opening a file in "write/update mode" with read-only permission**  
+
+---
+
+## **Exceptions in Java**  
+
+### **Keyword: Exception**  
+An **exception** is an **error state** caused by a **runtime error** in your code.  
+
+### **How Java Handles Exceptions**  
+- Java creates an **exception object** to represent the error encountered.  
+- The program can **handle exceptions** using `try-catch` blocks.  
+
+Example:  
 ```java
 try {
-    int data = 50 / 0;  // This will cause an ArithmeticException
+    int result = 10 / 0;  // Error: Division by zero
 } catch (ArithmeticException e) {
-    System.out.println("Cannot divide by zero");
+    System.out.println("Cannot divide by zero!");
 }
 ```
 
@@ -1754,58 +1859,407 @@ try {
 ## 21. Enumerated Types, Variadic Parameters, Functional Interfaces, Lambda Expressions, Method References, Streams
 
 ### Enumerated Types
+**Keyword: `enum`** – A class that consists of a **finite list of constants**.  
+
+### **Why Use Enums?**  
+- Used when we need to represent a **fixed set of values**.  
+- Must list **all possible values** explicitly.  
+- Just like any other **class**, enums can have **methods** and **attributes**.  
+
+---
+
+## **Defining an Enum in Java**  
+
+Let’s define an **enum** for the **Rank** of a card:  
 ```java
-enum Day {
-    MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY
+public enum Rank {
+    ACE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING;
 }
+```
+
+And a **Card class** that uses this enum:  
+```java
+public class Card {
+    private Rank rank;
+
+    public Card(Rank rank) {
+        this.rank = rank;
+    }
+
+    public Rank getRank() {
+        return rank;
+    }
+}
+```
+
+---
+
+## **Enum Variables and Built-in Methods**  
+
+Enums in Java **come with built-in methods**:  
+
+### **1. Default Constructor**  
+Enums **automatically** create a **default constructor**, which assigns values to constants.  
+
+### **2. `toString()`**  
+Returns the **name of the enum constant** as a `String`.  
+```java
+System.out.println(Rank.ACE.toString());  // Output: ACE
+```
+
+### **3. `compareTo()`**  
+Compares the **ordinal values** of two enum constants.  
+```java
+System.out.println(Rank.KING.compareTo(Rank.QUEEN));  // Output: 1
+```
+
+### **4. `ordinal()`**  
+Returns the **position (zero-based index)** of the constant in the enum list.  
+```java
+System.out.println(Rank.TEN.ordinal());  // Output: 9
+```
+
+---
+
+## **Adding Methods to an Enum**  
+
+Since **enums are also classes**, we can **add (or override) methods**:  
+
+### **Example: Checking Face Cards**
+```java
+public enum Rank {
+    ACE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING;
+
+    public boolean isFaceCard() {
+        return this.ordinal() > Rank.TEN.ordinal();
+    }
+}
+```
+### **Usage**
+```java
+System.out.println(Rank.JACK.isFaceCard());  // Output: true
+System.out.println(Rank.TWO.isFaceCard());   // Output: false
 ```
 
 ### Variadic Parameters
+
+### **What are Variadic Methods?**  
+**Keyword: `Variadic Method`** – A method that takes an **unknown number of arguments**.
+
+- **How does it work?**  
+  - Variadic methods are not overloaded for each possible number of arguments. Instead, they **implicitly convert** the input arguments into an array.
+  
+- **Example Usage:**
+
 ```java
-public void printNumbers(int... numbers) {
-    for (int num : numbers) {
-        System.out.println(num);
+public class VariadicExample {
+
+    public static void main(String[] args) {
+        // Calling the variadic method
+        System.out.println(concatenate("Hello", "world!"));
+        System.out.println(concatenate("Programming", "is", "fun!"));
+    }
+
+    // Variadic method that concatenates an unknown number of String arguments
+    public static String concatenate(String... strings) {
+        String result = "";  
+        // Loop through each string argument
+        for (String s : strings) {
+            result += " " + s;  // Concatenate with space
+        }
+        return result.trim();  // Return concatenated string, trimming any leading/trailing space
     }
 }
 ```
+
+### **Output:**
+```
+Hello world!
+Programming is fun!
+```
+
+---
+
+### **Explanation:**
+- **`String... strings`**: This is the **variadic parameter**. It allows the method to accept **any number of String arguments**. Internally, the `strings` parameter is treated as an array.
+  
+- The method `concatenate` iterates over each string passed to it and concatenates them with a space.
+
+- The result is a single string containing all the input strings joined together.
+
 
 ### Functional Interfaces
+
+### **What is a Functional Interface?**
+
+**Keyword: `Functional Interface`**  
+A **Functional Interface** is an interface that contains **only a single abstract method**. It is also called a **Single Abstract Method (SAM) interface**.
+
 ```java
 @FunctionalInterface
-interface MyFunctionalInterface {
-    void execute();
+public interface Attackable {
+    void attack();  // Single abstract method
 }
 ```
 
-### Lambda Expressions
-```java
-MyFunctionalInterface func = () -> System.out.println("Hello, Lambda!");
-func.execute();
-```
+- A functional interface can only contain **one non-static method**. Adding more than one abstract method will cause a **compilation error**.
 
-### Method References
-```java
-public class MethodReferenceExample {
-    public static void greet() {
-        System.out.println("Hello!");
-    }
+### **Characteristics of Functional Interfaces**
 
-    public static void main(String[] args) {
-        MyFunctionalInterface func = MethodReferenceExample::greet;
-        func.execute();
-    }
+- **Single Abstract Method**: This is the core characteristic of a functional interface.
+- **Used for Lambdas and Method References**: Functional interfaces are primarily used for enabling **lambda expressions** and **method references**.
+- **Common Examples**:  
+  - `Runnable`, `Callable`, `Comparator`
+  - Custom interfaces annotated with `@FunctionalInterface`
+
+### **Why Are Functional Interfaces Useful?**
+
+Even without **lambdas** or **method references**, functional interfaces are still valuable for the following reasons:
+
+1. **Provide a Clear Contract with a Single Method**  
+   - The functional interface clearly defines the behavior through a single abstract method, ensuring clarity.
+
+2. **Ensure Consistent Behavior Definition**  
+   - Functional interfaces help guarantee **consistent** behavior, as there is only one method to implement.
+
+3. **Simplify Implementations Using Anonymous Inner Classes**  
+   - They simplify code by allowing you to easily create anonymous inner classes to implement the interface.
+
+4. **Maintain Compatibility with Frameworks and APIs**  
+   - Many libraries, frameworks, and APIs rely on functional interfaces for defining **callback mechanisms**, **listeners**, and **handlers**.
+
+5. **Facilitate Testing and Documentation**  
+   - Functional interfaces make testing and documenting code easier because of their **single-method** structure.
+
+6. **Support Design Patterns like Strategy and Command**  
+   - They are great for implementing design patterns such as the **Strategy** and **Command** patterns, where behavior is passed as an object.
+
+### **Common Use Cases of Functional Interfaces**
+
+1. **Callback Mechanism**:  
+   - Use functional interfaces to define a **single action** to be executed when needed.
+
+2. **Strategy Pattern**:  
+   - Implement various strategies that can be easily swapped, promoting flexibility in the design.
+
+3. **Stream API**:  
+   - The **Stream API** leverages functional interfaces like `Predicate`, `Function`, and `Consumer` to manipulate collections in a declarative way.
+
+### Lambda Expressions 
+A **Lambda Expression** is a technique that treats code as data, which can be used as an **object**. It allows us to **instantiate interfaces** (particularly **functional interfaces**) without the need to explicitly implement them in a class.
+
+Example of a **lambda expression**:
+
+```java
+public interface Predicate<T> {
+    boolean test(T t);
 }
+
+// Lambda expression implementing the Predicate interface
+Predicate<Integer> p = i -> i > 0;
 ```
 
+- **Predicate** is a functional interface with a `test` method.
+- The lambda expression `i -> i > 0` defines the behavior of the `test` method, checking whether an integer is greater than zero.
+
+#### **Structure of a Lambda Expression**
+
+A **lambda expression** follows the general structure:
+
+```java
+(sourceVariable1, sourceVariable2, ...) -> <operation on source variables>
+```
+
+Where:
+- **Source Variables**: These are the input arguments (can be zero or more).
+- **Operation**: The expression defines what operation to perform on the source variables.
+
+#### **Examples of Operations in Lambda Expressions**
+
+1. **Doubling an Integer**:  
+   A lambda expression can be used to double the value of an integer:
+   ```java
+   Function<Integer, Integer> doubleValue = x -> x * 2;
+   ```
+
+2. **Comparing Two Objects**:  
+   A lambda expression can compare two objects (e.g., integers or strings):
+   ```java
+   Comparator<Integer> compareNumbers = (a, b) -> a.compareTo(b);
+   ```
+
+3. **Performing a Boolean Test**:  
+   A lambda can be used to apply boolean logic to an object:
+   ```java
+   Predicate<String> isEmpty = str -> str.isEmpty();
+   ```
+
+4. **Copying an Object**:  
+   Lambda expressions can be used to perform actions like copying or modifying objects:
+   ```java
+   Function<String, String> copyText = str -> str + " copied!";
+   ```
+
+#### **Benefits of Lambda Expressions**
+
+- **Concise**: Lambda expressions allow you to write more concise and readable code.
+- **Eliminates Boilerplate Code**: It removes the need for implementing unnecessary methods or classes.
+- **Enables Functional Programming**: Lambda expressions align well with the functional programming paradigm, where functions can be treated as first-class citizens.
+
+### **Method References in Java**
+
+#### **What is a Method Reference?**
+
+**Keyword: `Method Reference`**  
+A **Method Reference** is a shorthand notation for a lambda expression that calls a single method. It allows you to refer directly to a method of a class or object, instead of using a lambda expression to invoke that method.
+
+A method reference can be used in the following way:
+
+```java
+names.replaceAll(String::toUpperCase);
+```
+
+This replaces each string in the `names` list with its uppercase version. The method reference `String::toUpperCase` is equivalent to the lambda expression `s -> s.toUpperCase()`.
+
+#### **How are Method References Stored?**
+
+Method references can be stored in the same way lambda expressions are stored. For example, the following lambda expression:
+
+```java
+UnaryOperator<String> operator = s -> s.toLowerCase();
+```
+
+Can be replaced with a method reference:
+
+```java
+UnaryOperator<String> operator = String::toLowerCase;
+```
+
+#### **Types of Method References**
+
+There are three main types of method references in Java:
+
+1. **Static Method References**  
+   When referencing a **static method**, the syntax is:
+   ```java
+   Class::staticMethod
+   ```
+   Example:
+   ```java
+   Person::printWarning
+   ```
+
+2. **Instance Method References**  
+   You can reference **instance methods** in two ways:
+   - **Using the class name**:  
+     ```java
+     Class::instanceMethod
+     ```
+     Example:
+     ```java
+     String::startsWith
+     ```
+
+   - **Using an object reference**:  
+     ```java
+     object::instanceMethod
+     ```
+     Example:
+     ```java
+     person::toString
+     ```
+
+3. **Constructor References**  
+   A **constructor reference** allows you to reference a class constructor. The syntax is:
+   ```java
+   Class::new
+   ```
+   Example:
+   ```java
+   String::new
+   ```
+
+#### **How Method References Work**
+
+- **Method Arguments**: With method references, the arguments are implied by the context of the method call. For example:
+  - In the case of `String::toUpperCase`, the string object `s` will be automatically passed to the `toUpperCase()` method when the method reference is called.
+ 
+  
 ### Streams
-```java
-import java.util.Arrays;
-import java.util.List;
+### **Streams in Java**
 
-public class StreamExample {
-    public static void main(String[] args) {
-        List<String> list = Arrays.asList("a", "b", "c");
-        list.stream().forEach(System.out::println);
-    }
-}
+Streams in Java are a powerful technique that enable you to perform complex data manipulation and transformations in a more readable and functional style. A **Stream** is a sequence of elements that supports various operations to manipulate or process the data. Streams can be used with collections (like lists, sets, etc.), and they allow for functional-style operations such as `map`, `filter`, `limit`, `collect`, and `reduce`.
+
+### **Common Stream Operations**
+
+#### 1. **map (convert input to output)**
+The `map` operation transforms each element of the stream into another element. It applies a function to each element of the stream and returns a new stream consisting of the transformed elements.
+
+Example:
+```java
+List<String> words = Arrays.asList("apple", "banana", "cherry");
+List<String> upperCaseWords = words.stream()
+                                   .map(String::toUpperCase)
+                                   .collect(Collectors.toList());
+System.out.println(upperCaseWords);  // Output: [APPLE, BANANA, CHERRY]
+```
+
+#### 2. **filter (select elements with a condition)**
+The `filter` operation is used to select elements from the stream that satisfy a particular condition. It takes a **predicate** as a parameter and returns a new stream containing only the elements that match the condition.
+
+Example:
+```java
+List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+List<Integer> evenNumbers = numbers.stream()
+                                   .filter(n -> n % 2 == 0)
+                                   .collect(Collectors.toList());
+System.out.println(evenNumbers);  // Output: [2, 4, 6, 8, 10]
+```
+
+#### 3. **limit (perform a maximum number of iterations)**
+The `limit` operation is used to reduce the size of the stream by limiting it to a specified number of elements. This is useful when you only want the first N elements of a stream.
+
+Example:
+```java
+List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+List<Integer> firstThreeNumbers = numbers.stream()
+                                         .limit(3)
+                                         .collect(Collectors.toList());
+System.out.println(firstThreeNumbers);  // Output: [1, 2, 3]
+```
+
+#### 4. **collect (gather all elements and output in a collection like List, Set, String, etc.)**
+The `collect` operation is used to transform the elements of the stream into a different form, usually a collection such as a List, Set, or Map. This is a **terminal operation**, meaning it consumes the stream and produces a result.
+
+Example:
+```java
+List<String> words = Arrays.asList("apple", "banana", "cherry");
+String concatenatedWords = words.stream()
+                                .collect(Collectors.joining(", "));
+System.out.println(concatenatedWords);  // Output: apple, banana, cherry
+```
+
+#### 5. **reduce (aggregate a stream into a single value)**
+The `reduce` operation performs a reduction on the elements of the stream using an associative accumulation function. It combines the elements of the stream into a single value. This is also a **terminal operation**.
+
+Example:
+```java
+List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+int sum = numbers.stream()
+                 .reduce(0, (a, b) -> a + b);
+System.out.println(sum);  // Output: 15
+```
+In this example, the `reduce` operation starts with an initial value of 0 and applies the lambda function `(a, b) -> a + b` to accumulate the sum of all numbers in the list.
+
+### **Combining Stream Operations**
+You can combine multiple stream operations to process data in a flexible and functional way. For example:
+
+```java
+List<String> words = Arrays.asList("apple", "banana", "cherry", "date", "elderberry");
+List<String> result = words.stream()
+                           .filter(word -> word.length() > 5)
+                           .map(String::toUpperCase)
+                           .limit(3)
+                           .collect(Collectors.toList());
+System.out.println(result);  // Output: [BANANA, CHERRY, ELDERBERRY]
 ```

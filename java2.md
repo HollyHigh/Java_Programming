@@ -1227,5 +1227,239 @@ public class WriteFile {
     }
 }
 ```
+## 15. Inheritance
 
----
+Inheritance allows one class (the **subclass** or **child class**) to inherit attributes and behaviors (methods) from another class (the **superclass** or **parent class**). It provides a way to avoid redundancy by reusing code and establishing a relationship between classes. 
+
+Let's break down the key concepts in your example of chess pieces:
+
+### **Parent Class (Superclass) - `Piece`**
+The `Piece` class can be used to define common attributes and methods for all chess pieces. Attributes like `isAlive`, `isWhite`, `currentRow`, and `currentColumn` are common to all chess pieces, so they are placed in the `Piece` class.
+
+### **Subclass (Child Classes) - `Pawn`, `Rook`, `Knight`, `Bishop`, `King`, `Queen`**
+Each individual chess piece is a subclass of the `Piece` class, inheriting common properties and methods but also adding specific behaviors of its own.
+
+### **Constructor Inheritance**
+A constructor is used to initialize an object when it's created. Inheritance works with constructors as well, and the `super` keyword is used to invoke the parent class's constructor from the subclass.
+
+- **The `super` Keyword**: 
+  - Used to invoke a constructor from the parent class.
+  - The `super` constructor must be the first statement in the subclass constructor (if used).
+  - The parameter types to the `super` constructor call must match the constructor in the parent class.
+
+For example, if the parent class `Piece` has a constructor that accepts `currentRow` and `currentColumn`, the subclass constructor will call `super(currentRow, currentColumn)` to initialize these values.
+
+### **Method Inheritance and Overriding**
+- **Method Inheritance**: A method defined in the parent class is inherited by the child class.
+  - Example: A `move()` method can be common for all pieces, as the general logic of moving could be shared across all pieces. This method is inherited by all subclasses.
+  
+- **Method Overriding**: Sometimes, the method behavior needs to be different in the subclass. This is where method overriding comes into play.
+  - Example: The method `isValidMove()` might be the same in the parent class but will be overridden in the child classes to define specific movement rules for each piece. A `Rook` moves in straight lines, while a `Knight` moves in an "L" shape. So, the `isValidMove()` method will be overridden in each subclass to implement its own movement rules.
+
+#### **Method Overriding Example**
+```java
+class Piece {
+    int currentRow, currentColumn;
+
+    // Constructor
+    public Piece(int currentRow, int currentColumn) {
+        this.currentRow = currentRow;
+        this.currentColumn = currentColumn;
+    }
+
+    // Common method inherited by all pieces
+    public void move(int newRow, int newColumn) {
+        // Move logic common for all pieces
+        this.currentRow = newRow;
+        this.currentColumn = newColumn;
+    }
+
+    // Method that will be overridden
+    public boolean isValidMove(int newRow, int newColumn) {
+        // General move validation (checking if the new position is within the board)
+        return newRow >= 0 && newRow < 8 && newColumn >= 0 && newColumn < 8;
+    }
+}
+
+class Rook extends Piece {
+    public Rook(int currentRow, int currentColumn) {
+        super(currentRow, currentColumn); // Calling the parent constructor
+    }
+
+    // Overriding the isValidMove method for Rook's specific movement
+    @Override
+    public boolean isValidMove(int newRow, int newColumn) {
+        // Rook can move in straight lines horizontally or vertically
+        return newRow == currentRow || newColumn == currentColumn;
+    }
+}
+
+class Knight extends Piece {
+    public Knight(int currentRow, int currentColumn) {
+        super(currentRow, currentColumn); // Calling the parent constructor
+    }
+
+    // Overriding the isValidMove method for Knight's specific movement
+    @Override
+    public boolean isValidMove(int newRow, int newColumn) {
+        // Knight moves in an "L" shape
+        int rowDiff = Math.abs(newRow - currentRow);
+        int colDiff = Math.abs(newColumn - currentColumn);
+        return (rowDiff == 2 && colDiff == 1) || (rowDiff == 1 && colDiff == 2);
+    }
+}
+```
+
+### **Why Override Methods?**
+
+- **Customization**: Subclasses can customize or extend the functionality of a parent class method to suit their own behavior.
+- **Polymorphism**: Method overriding allows a subclass to have its own specific implementation of a method, even if it shares the same name and signature as a method in the parent class. This enables polymorphism, which is the ability to call a method on an object, regardless of the actual object type, and have it execute the correct version of the method (the one in the subclass).
+
+### **Benefits of Method Overriding**
+
+1. **Specialized Behavior**: Subclasses can implement specialized logic while retaining the general behavior defined in the parent class.
+2. **Code Reusability**: Common logic (like move logic) can be inherited, while specific details (like movement rules) are handled by the subclass.
+3. **Polymorphism**: A reference to the parent class can hold an object of any subclass, and the appropriate overridden method will be invoked based on the actual object type.
+
+### **Using `@Override` Annotation**
+The `@Override` annotation is optional but highly recommended as it helps to ensure that a method is indeed overriding a method from the parent class. It also provides a compile-time check to avoid errors when the method signature does not match the parent class method.
+
+```java
+@Override
+public boolean isValidMove(int newRow, int newColumn) {
+    // Rook specific move logic
+}
+```
+
+### **Conclusion**
+
+- **Inheritance** allows code reuse, where common behaviors (like attributes and methods) are placed in a parent class, and specific behaviors are defined in the subclasses.
+- **Constructors** in subclasses can invoke the parent class constructor using the `super` keyword.
+- **Method Overriding** allows subclasses to modify or extend the behavior of inherited methods to suit their specific needs.
+
+## 16. Interfaces
+### **Interfaces in Java**
+
+Interfaces are used in Java to define a contract of behavior that classes can agree to implement. They define methods that a class must provide, but they do not provide the implementation details. This allows for a more flexible and modular design.
+
+#### **Key Concepts of Interfaces**
+
+- **Abstract Methods**: Methods in an interface are abstract by default, meaning they do not have a body. The implementing class must provide the method's implementation.
+- **Attributes**: All attributes in an interface are implicitly `public`, `static`, and `final` (i.e., constants).
+- **Access Modifiers**: All methods in an interface are implicitly `public`. You cannot specify other access levels for methods or attributes in an interface.
+
+#### **Syntax of an Interface**
+```java
+public interface Printable {
+    // Constant attribute
+    int MAXIMUM_PIXEL_DENSITY = 1000;
+
+    // Abstract method
+    void print();
+}
+```
+
+Here, the `Printable` interface defines a constant `MAXIMUM_PIXEL_DENSITY` and an abstract method `print()`. Any class that implements the `Printable` interface must implement the `print()` method.
+
+#### **Implementing Interfaces**
+To implement an interface, a class must use the `implements` keyword and provide implementations for all methods defined in the interface.
+
+##### Example of Implementing an Interface:
+
+```java
+// Interface
+public interface Printable {
+    int MAXIMUM_PIXEL_DENSITY = 1000;
+
+    void print();
+}
+
+// Class Image implementing Printable interface
+public class Image implements Printable {
+    @Override
+    public void print() {
+        System.out.println("Printing Image...");
+    }
+}
+
+// Class Spreadsheet implementing Printable interface
+public class Spreadsheet implements Printable {
+    @Override
+    public void print() {
+        System.out.println("Printing Spreadsheet...");
+    }
+}
+```
+
+In this example:
+- Both `Image` and `Spreadsheet` classes implement the `Printable` interface.
+- They both provide their own implementation of the `print()` method.
+
+#### **Abstract Classes vs Interfaces**
+While abstract classes are used to provide a common base with some implemented methods, interfaces are used to define a contract that multiple classes can implement. 
+
+- **Abstract Class**: Can have both implemented and unimplemented methods.
+- **Interface**: Can only declare abstract methods (though this has been relaxed slightly in newer versions of Java with default methods).
+
+#### **Default Methods**
+In Java 8 and later, interfaces can have **default methods**. These are methods with an implementation that can be optionally overridden by the implementing class.
+
+This feature allows you to add functionality to an interface without breaking the implementing classes. If a class does not override the default method, it will use the default implementation.
+
+##### Example of Default Method:
+
+```java
+public interface Printable {
+    int MAXIMUM_PIXEL_DENSITY = 1000;
+
+    default void print() {
+        System.out.println("Printing by default: " + this.toString());
+    }
+}
+
+// Class Image implements Printable and uses default print method
+public class Image implements Printable {
+    // No need to override print, it will use the default method
+}
+
+// Class CustomImage implements Printable and overrides the default print method
+public class CustomImage implements Printable {
+    @Override
+    public void print() {
+        System.out.println("Custom Printing Image...");
+    }
+}
+```
+
+In this example:
+- The `Image` class does not override the `print()` method, so it uses the default implementation.
+- The `CustomImage` class overrides the `print()` method, providing its custom behavior.
+
+#### **Why Use Interfaces?**
+1. **Multiple Inheritance**: In Java, a class can inherit from only one class, but it can implement multiple interfaces. This allows for multiple inheritance of behavior.
+   
+   ```java
+   public class MultiPurposeDevice implements Printable, Scannable {
+       // Implement methods from both Printable and Scannable interfaces
+   }
+   ```
+
+2. **Loose Coupling**: Interfaces help in decoupling the code, making it easier to change and extend. You can change the implementation of a method without affecting the classes that use the interface.
+
+3. **Polymorphism**: Interfaces allow for polymorphic behavior. Objects of different classes can implement the same interface and be treated interchangeably.
+   
+   ```java
+   Printable p1 = new Image();
+   Printable p2 = new Spreadsheet();
+   
+   p1.print(); // Calls print method from Image class
+   p2.print(); // Calls print method from Spreadsheet class
+   ```
+
+4. **Design Patterns**: Interfaces are commonly used in design patterns like Strategy, Observer, and Command, where behavior is abstracted and can be changed dynamically.
+
+#### **Summary**
+- **Interface**: Defines a contract with abstract methods and constant attributes.
+- **`implements` keyword**: Used by a class to promise to provide implementations for all methods declared in the interface.
+- **`default` methods**: Provide default method implementations that can be optionally overridden.
+- **Why Use Interfaces**: To define common behavior across different classes, allow for multiple inheritance, decouple code, and enable polymorphism.

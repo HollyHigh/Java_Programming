@@ -1,0 +1,1231 @@
+# Java Programming Guide
+
+## Course Outline
+1. Identifiers, Data Types, Variables and Constants
+2. Operators and Expressions
+3. Flow of Control
+4. Classes, Objects
+5. Defining a Class, Using a Class
+6. Getters, Setters and Constructors
+7. Static Attributes and Methods
+8. Standard Methods in Java
+9. Array Initialization and Assignment
+10. Strings
+11. Introducing Java Packages, Information Hiding
+12. Delegation through Association
+13. Wrapper Classes
+14. Input/Output
+15. Interfaces
+16. Representing a Class in UML
+17. Collections and Maps
+18. Type Parameters, Bounded Type Parameters
+19. Design Patterns
+20. Exception Handling, Chaining Exceptions
+21. Enumerated Types, Variadic Parameters, Functional Interfaces, Lambda Expressions, Method References, Streams
+
+---
+
+## 1. Identifiers, Data Types, Variables and Constants
+
+### **Java Identifiers**
+An **identifier** is the name assigned to program elements such as classes, objects, variables, and methods.
+
+#### **Rules for Java Identifiers**
+- Must **not** start with a digit.
+- Can only contain **letters, digits, and the underscore (`_`) symbol**.
+- Can theoretically be of **any length**.
+- Are **case-sensitive** (e.g., `Rate`, `rate`, and `RATE` are different identifiers).
+
+#### **Java Identifier Conventions**
+- **Variables, methods, and objects**:  
+  - Start with a **lowercase letter**.  
+  - Use **camelCase** for multiple words (e.g., `topSpeed`, `bankRate`, `timeOfArrival`).
+- **Classes**:  
+  - Start with an **uppercase letter**.  
+  - Follow camel case (e.g., `PrintDemo`, `HelloWorld`).
+
+#### **Restricted Identifiers**
+- **Keywords and reserved words**:  
+  - Cannot be used as identifiers (e.g., `public`, `class`, `void`, `static`).
+- **Predefined identifiers from Java libraries**:  
+  - Can be redefined, but doing so is discouraged as it can cause confusion or unintended behavior (e.g., `System`, `String`, `println`).
+
+### Data Types
+### **Floating-Point Numbers in Java**
+Java provides two floating-point types:
+
+- **`float`** → **Single-precision** (32-bit)
+- **`double`** → **Double-precision** (64-bit, more precise and preferred by default)
+
+#### **Key Points**
+- By default, floating-point numbers in Java are treated as **double**.
+- To explicitly define a **float**, append **`f`** or **`F`** to the number.
+
+#### **Examples**
+```java
+float a = 2.3F;  // Single-precision (requires 'F' suffix)
+double b = 6.7;  // Double-precision (default)
+```
+
+### Variables
+### **Java Variables**
+- Variables **must be declared and initialized** before use.
+- The **assignment operator (`=`)** is used to assign or update values.
+
+#### **Syntax for Declaration & Initialization**
+```java
+<type> <variableName> = <initialValue>;
+```
+
+#### **Examples**
+```java
+int count = 1;
+float length = 2.3F;
+double height = 6.7;
+boolean status = true;
+```
+
+### **Variable Assignment**
+- The **assignment operator (`=`)** assigns a new value to a variable.
+- Values can be:
+  - Another variable
+  - A direct value (literal)
+  - A mathematical expression
+
+#### **Syntax**
+```java
+<variableName> = <otherVariable> OR <value> OR <expression>;
+```
+
+#### **Examples**
+```java
+int countX = 1, countY = 2;
+countX = countY;       // Assign countY's value to countX
+countX = countY + 3;   // Assign result of expression to countX
+countX += 3;           // Shorthand for countX = countX + 3
+```
+
+### **Type Compatibility in Assignments**
+- **Type mismatch is not allowed** (e.g., assigning `double` to `int` directly).
+- **Implicit conversion** (widening) is allowed where safe.
+
+#### **Examples**
+```java
+int intVariable = 2.99;  // ❌ Not valid (double to int without casting)
+double doubleVariable = 2;  // ✅ Valid (int to double, implicit conversion)
+```
+
+### **Type Conversion in Java**  
+
+Java allows **implicit** (widening) and **explicit** (narrowing) type conversions between primitive data types.  
+
+#### **Implicit (Widening) Conversion**  
+A value of any type can be **automatically** assigned to a variable of a type **to the right** in the list:  
+```
+byte → short → int → long → float → double  
+char → int  
+```
+- This is **safe** because there is no loss of precision (except for `float` and `double` due to rounding errors).  
+
+#### **Explicit (Narrowing) Conversion (Casting)**  
+A value of a **larger type** cannot be directly assigned to a **smaller type** without an explicit **type cast**.  
+```java
+int x = 2.99;        // ❌ Not valid (double to int without casting)
+int y = (int) 2.99;  // ✅ Valid (explicit cast), y will be 2 (truncation, not rounding)
+```
+- **Casting truncates decimals** (does **not** round).  
+
+#### **Boolean Type Restrictions**  
+- `boolean` **cannot** be converted to or from any numeric type.  
+```java
+int num = true;   // ❌ Not valid
+boolean flag = 1; // ❌ Not valid
+```
+
+### **Java Variable Categories**  
+
+Java variables are classified into three main types:  
+
+1️⃣ **Instance Variables**  
+   - Defined **inside a class but outside any method**.  
+   - Each **object (instance) has its own copy** of these variables.  
+   - **No `static` keyword** is used.  
+   - **Default values** are assigned if not initialized.  
+
+   **Example:**  
+   ```java
+   class Car {
+       int speed;  // Instance variable
+   }
+   ```
+
+2️⃣ **Static (Class) Variables**  
+   - Defined **inside a class but outside any method**, with the `static` keyword.  
+   - **Shared among all instances** of the class.  
+   - Belong to the **class, not individual objects**.  
+   - **Default values** are assigned if not initialized.  
+
+   **Example:**  
+   ```java
+   class Car {
+       static int totalCars;  // Static variable (shared across all objects)
+   }
+   ```
+
+3️⃣ **Local Variables**  
+   - **Declared inside a method** and **only exist within that method**.  
+   - **Must be initialized before use** (no default values).  
+   - Cannot be accessed outside the method.  
+
+   **Example:**  
+   ```java
+   class Car {
+       void drive() {
+           int distance = 10;  // Local variable
+       }
+   }
+   ```
+
+### Constants
+A **constant** is a value that **does not change** during program execution. In Java, constants are declared using the `final` keyword.  
+
+#### **Key Characteristics:**  
+✅ **Immutable**: Once assigned, a constant **cannot** be modified.  
+✅ **Declared using `final`**: The `final` keyword ensures the value remains **unchanged**.  
+✅ **Explicit Data Type**: Unlike C, Java **requires** an explicit data type.  
+✅ **Naming Convention**: Constants are written in **UPPERCASE** with words separated by underscores.  
+
+### **Declaring Constants**  
+
+```java
+final int MAX_LENGTH = 420;       // Integer constant  
+final char CHAR_CONSTANT = 'Z';   // Character constant  
+final boolean BOOL_CONSTANT = true; // Boolean constant  
+final String STRING_CONSTANT = "Welcome to Java"; // String constant  
+```
+
+### **Why Use Constants?**  
+🔹 Improves **code readability** (e.g., `MAX_SPEED` vs. `100`).  
+🔹 Prevents **accidental modification** of values.  
+🔹 Makes it **easier to update** values in large programs.  
+
+## 2. Operators and Expressions
+
+## Arithmetic Operators
+
+| Operator | Meaning                  |
+|----------|--------------------------|
+| `+`      | Addition and unary plus  |
+| `-`      | Subtraction or unary minus |
+| `*`      | Multiplication            |
+| `/`      | Division                  |
+| `%`      | Modulo division           |
+
+**Note:** When one of the operands is real and the other is an integer, the expression is called a mixed-mode arithmetic expression. If either operand is of real type, then the other operand is also converted to real, and real arithmetic is performed.
+
+### Arithmetic Operators - Example
+
+```java
+// ArithmeticExample.java - Using arithmetic operators
+public class ArithmeticExample {
+    public static void main(String args[]) {
+        float a = 20.5F, b = 6.4F;
+        int c = 11, d = 5;
+        
+        System.out.println("a + b = " + (a + b));
+        System.out.println("a - b = " + (a - b));
+        System.out.println("a * b = " + (a * b));
+        System.out.println("a / b = " + (a / b));
+        System.out.println("c % d = " + (c % d));
+    }
+}
+```
+
+**Program Output:**
+```
+a + b = 26.9
+a - b = 14.1
+a * b = 131.2
+a / b = 3.203125
+c % d = 1
+```
+
+---
+
+## Relational Operators
+
+| Operator | Meaning                  |
+|----------|--------------------------|
+| `<`      | Is less than             |
+| `<=`     | Is less than or equal to |
+| `>`      | Is greater than          |
+| `>=`     | Is greater than or equal to |
+| `==`     | Is equal to              |
+| `!=`     | Is not equal to          |
+
+**Note:** The result of a relational operator is of type `boolean`.
+
+### Relational Operators - Example
+
+```java
+// RelationalExample.java - Using relational operators
+public class RelationalExample {
+    public static void main(String args[]) {
+        int a = 3, b = 5;
+        
+        System.out.println("a < b = " + (a < b));
+        System.out.println("a > b = " + (a > b));
+        System.out.println("a <= b = " + (a <= b));
+        System.out.println("a >= b = " + (a >= b));
+        System.out.println("a == b = " + (a == b));
+        System.out.println("a != b = " + (a != b));
+    }
+}
+```
+
+**Program Output:**
+```
+a < b = true
+a > b = false
+a <= b = true
+a >= b = false
+a == b = false
+a != b = true
+```
+
+---
+
+## Logical Operators
+
+| Operator | Meaning        |
+|----------|---------------|
+| `&&`     | Logical AND   |
+| `\|\|`     | Logical OR    |
+| `!`      | Logical NOT   |
+
+---
+
+## Bitwise Operators
+
+| Operator | Meaning                 |
+|----------|-------------------------|
+| `&`      | Bitwise AND             |
+| `\|`      | Bitwise OR              |
+| `^`      | Bitwise exclusive OR    |
+| `~`      | One’s complement        |
+| `<<`     | Shift left              |
+| `>>`     | Shift right             |
+| `>>>`    | Shift right with zero fill |
+
+---
+
+## Other Operators
+
+### Increment and Decrement Operators
+```java
+++x; x++;
+--x; x--;
+```
+
+### Conditional Operator
+```java
+x = (a > b) ? a : b;
+```
+**Equivalent to:**
+```java
+if (a > b)
+    x = a;
+else
+    x = b;
+```
+
+---
+
+## Mathematical Functions
+
+Java supports mathematical functions such as `cos`, `sin`, and `log` using the `Math` class, defined in the `java.lang` package.
+
+**Usage Example:**
+```java
+double y, z;
+y = Math.sqrt(x);
+z = Math.cos(y);
+```
+
+**Note:** Refer to Java documentation for a complete list of methods supported.
+
+### Mathematical Functions - Example
+
+```java
+// MathSqrtExample.java - Compute the square root of a number
+class MathSqrtExample {
+    public static void main(String args[]) {
+        double x = 4;
+        double y;
+        
+        y = Math.sqrt(x);
+        System.out.println("The square root of " + x + " is " + y);
+    }
+}
+```
+
+**Program Output:**
+```
+The square root of 4.0 is 2.0
+```
+
+## 3. Flow of Control
+### Branching
+Branching in Java allows the program to choose different paths of execution depending on certain conditions. The main branching statements are:
+
+- **if-else statement**: Executes one block of code if a condition is true and another block if it's false.
+- **multi-way if-else statement**: Allows multiple conditions to be checked sequentially, with an `else if` clause for each alternative condition.
+- **switch statement**: Evaluates a variable and compares it against a series of constant values, executing the code corresponding to the first match.
+
+### Loops
+Loops allow you to repeat a block of code multiple times. Java supports several looping constructs:
+
+- **while loop**: Repeats a block of code as long as the condition is true.
+- **do-while loop**: Executes the block of code once and then repeats it as long as the condition is true.
+- **for loop**: Used when the number of iterations is known beforehand. It includes initialization, condition checking, and increment/decrement all in one line.
+
+#### Example: The `for` loop
+```java
+public class ForExample {
+    public static void main(String[] args) {
+        for (int n = 0; n < 5; n++) {
+            System.out.println("n = " + n);
+        }
+    }
+}
+```
+**Output:**
+```
+n = 0
+n = 1
+n = 2
+n = 3
+n = 4
+```
+
+### `break` Statement
+The `break` statement is used to exit a loop prematurely. This can be useful when you no longer need to continue looping, or you want to exit multiple nested loops at once using a labeled `break`.
+
+#### Example: Using `break` to exit a loop
+```java
+public class BreakExample {
+    public static void main(String[] args) {
+        loop1: for (int i = 0; i < 3; i++) {
+            loop2: for (int j = 0; j < 3; j++) {
+                System.out.println("i=" + i + " j=" + j);
+                if (j == 1)
+                    break loop1;  // Breaks out of the outer loop
+            }
+        }
+    }
+}
+```
+**Output:**
+```
+i=0 j=0
+i=0 j=1
+```
+
+### `continue` Statement
+The `continue` statement skips the current iteration of the loop and moves to the next one. It doesn't exit the loop but instead moves directly to the next iteration of the loop.
+
+#### Example: Using `continue`
+```java
+public class ContinueExample {
+    public static void main(String[] args) {
+        for (int i = 0; i < 5; i++) {
+            if (i == 2) {
+                continue;  // Skips the rest of the loop when i equals 2
+            }
+            System.out.println("i = " + i);
+        }
+    }
+}
+```
+**Output:**
+```
+i = 0
+i = 1
+i = 3
+i = 4
+```
+
+## 4. Classes, Objects
+
+### Class
+- Blueprint for objects.
+- Define properties (fields) and methods (functions).
+
+### Object
+- Instance of a class.
+- Example:
+```java
+class Dog {
+    String name;
+    int age;
+    void bark() {
+        System.out.println("Woof!");
+    }
+}
+
+Dog myDog = new Dog();
+myDog.name = "Buddy";
+myDog.age = 3;
+myDog.bark();  // Output: Woof!
+```
+
+---
+
+## 5. Defining a Class, Using a Class
+### Basic Concepts in Programming:
+1. **Calculation**: 
+   - **Constants**: Fixed values that don’t change during program execution.
+   - **Variables**: Storage locations that can hold data and may change over time.
+   - **Operators**: Symbols used to perform operations on variables and constants (e.g., `+`, `-`, `*`, `/`).
+   - **Expressions**: Combinations of variables, constants, and operators that produce a value.
+
+2. **Selection**:
+   - **if-else**: Used to execute one block of code if a condition is true and another block if it is false.
+   - **switch**: A multi-way branching statement that tests a variable against different possible values.
+   - **Ternary operator (`? :`)**: A shorthand for an `if-else` statement. It’s typically written as `condition ? value_if_true : value_if_false`.
+
+3. **Iteration**:
+   - **while**: Repeats a block of code while a given condition is true.
+   - **do-while**: Similar to `while`, but guarantees at least one iteration since the condition is checked after the loop body.
+   - **for**: Typically used when the number of iterations is known beforehand, with initialization, condition, and increment/decrement all in one line.
+
+4. **Abstraction**:
+   - Abstraction is the process of hiding the complex implementation details and exposing only the essential features of an entity.
+   - It allows you to create **general solutions** that can be reused in different contexts, making the program more flexible and easier to manage.
+
+### Abstraction in Different Programming Paradigms:
+- **Procedural Programming (e.g., C)**: 
+  - Abstraction is achieved using **functions** or **procedures**. A function encapsulates logic that can be reused, reducing code duplication and enhancing maintainability.
+  - A function can take **parameters** to make it more general and flexible.
+
+- **Object-Oriented Programming (OOP) (e.g., Java, C++)**: 
+  - Abstraction is achieved through **Abstract Data Types (ADTs)**, which combine both **data** and **functions** that operate on that data into a **class**.
+  - A **class** defines a blueprint for creating objects. It can contain:
+    - **Attributes (or fields)**: Represent the state or properties of an object.
+    - **Methods (or functions)**: Define behaviors or operations that an object can perform.
+
+### Key Concepts in OOP: **Classes** and **Objects**
+- **Class**:
+  - A class is a **template** or **blueprint** for creating objects that share common properties and behaviors.
+  - It can represent a real-world entity (e.g., `Student`, `Car`) or abstract concepts (e.g., `List`, `String`).
+  - It contains **attributes** (fields) and **methods** (functions).
+  - **Example**: A `Car` class might have attributes like `make`, `model`, and `year`, and methods like `start()` and `stop()`.
+
+- **Object**:
+  - An object is an **instance** of a class. It represents a specific realization of a class and contains actual data.
+  - Each object has its own **state**, which can vary from one instance to another.
+  - The term **instance** refers to an object created from a class.
+
+### Example in Java:
+```java
+// Defining a class
+public class Car {
+    // Attributes
+    String make;
+    String model;
+    int year;
+
+    // Constructor
+    public Car(String make, String model, int year) {
+        this.make = make;
+        this.model = model;
+        this.year = year;
+    }
+
+    // Method
+    public void start() {
+        System.out.println("The car is starting...");
+    }
+
+    public void stop() {
+        System.out.println("The car is stopping...");
+    }
+}
+
+// Creating objects (instances) of the class
+public class Main {
+    public static void main(String[] args) {
+        Car car1 = new Car("Toyota", "Corolla", 2020); // Object 1
+        Car car2 = new Car("Honda", "Civic", 2021);   // Object 2
+
+        car1.start();  // Calling method on object 1
+        car2.stop();   // Calling method on object 2
+    }
+}
+```
+
+**Explanation**:
+- `Car` is a class with attributes `make`, `model`, and `year`, and methods `start()` and `stop()`.
+- `car1` and `car2` are objects (instances) of the `Car` class. Each object has its own values for the attributes and can call the methods.
+
+This abstraction makes it easier to work with complex systems by focusing on high-level interactions (via methods) rather than the detailed implementation. By creating classes that encapsulate data and operations, the code becomes more modular, reusable, and easier to maintain.
+
+## 6. Getters, Setters and Constructors
+
+### Getters and Setters
+**Getters** and **setters** are essential in Java for controlling the access and modification of an object's instance variables. These methods ensure that your class maintains **encapsulation** by providing a controlled interface to its internal state.
+
+### **Accessor (Getter)** and **Mutator (Setter)** Methods
+
+1. **Getter (Accessor)**: 
+   - Retrieves or returns the value of a private field.
+   - Conventionally starts with `get` followed by the field name, capitalized.
+   
+2. **Setter (Mutator)**: 
+   - Sets or updates the value of a private field.
+   - Conventionally starts with `set` followed by the field name, capitalized.
+
+### Example
+
+If you have a class `Circle` with a `radius` field, you can create getter and setter methods as follows:
+
+```java
+public class Circle {
+    // Private field
+    private double radius;
+
+    // Getter (Accessor) method for radius
+    public double getRadius() {
+        return radius;
+    }
+
+    // Setter (Mutator) method for radius
+    public void setRadius(double radius) {
+        if (radius > 0) { // Optional validation
+            this.radius = radius;
+        } else {
+            System.out.println("Radius must be positive.");
+        }
+    }
+}
+```
+
+### How to Use Getter and Setter
+
+To access or modify the `radius` of a `Circle` object, you'd use the getter and setter methods:
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        // Instantiate Circle object
+        Circle aCircle = new Circle();
+
+        // Set radius using the setter method
+        aCircle.setRadius(5.0);
+
+        // Get radius using the getter method
+        double currentRadius = aCircle.getRadius();
+
+        // Output the current radius
+        System.out.println("Radius of the circle: " + currentRadius);
+    }
+}
+```
+
+### IDE Support for Getters and Setters
+
+- **IDEs like IntelliJ IDEA** and **Eclipse** provide **automatic generation** of getter and setter methods. This feature saves a lot of time and ensures that the method signatures follow the correct conventions.
+  
+  **For example in IntelliJ IDEA**:
+  - Right-click in your class where you want the methods.
+  - Select **Generate** → **Getter and Setter**.
+  - Choose the fields for which you want to generate the methods.
+
+### Why Use Getters and Setters?
+
+1. **Encapsulation**: By using getters and setters, you can keep your class's fields private and expose them through public methods. This prevents direct access to the fields and allows for more control over their values.
+
+2. **Validation and Logic**: You can add logic inside setter methods to validate or process data before setting a field, ensuring the object's state remains consistent.
+
+3. **Maintainability**: If you later decide to change how data is represented or handled internally, you can modify the getter/setter without affecting the rest of the code that uses the class.
+
+### Summary
+
+- **Getters and setters** are used to access and modify instance variables.
+- They provide **controlled access** to the fields of an object, ensuring **encapsulation** and **data integrity**.
+- **IDEs** like IntelliJ IDEA and Eclipse help generate these methods quickly and correctly.
+
+### Constructors
+### **Constructors in Java**
+
+A **constructor** is a special method used to **initialize objects** when they are created. Constructors have the following characteristics:
+
+### Key Characteristics:
+1. **Same Name as the Class**: The constructor name must match the class name.
+2. **No Return Type**: Constructors do not have a return type.
+3. **Object Initialization**: They are used to set the initial values of an object’s attributes.
+4. **Overloading**: A class can have multiple constructors with different parameters (constructor overloading).
+
+### Syntax:
+```java
+public class Circle {
+    private double radius;
+
+    // Default constructor
+    public Circle() {
+        this.radius = 1.0;
+    }
+
+    // Constructor with parameters
+    public Circle(double radius) {
+        this.radius = radius;
+    }
+}
+```
+
+### Creating Objects:
+- **Using the default constructor**:
+```java
+Circle aCircle = new Circle();
+```
+- **Using the parameterized constructor**:
+```java
+Circle bCircle = new Circle(5.0);
+```
+
+### Constructor Overloading:
+A class can have multiple constructors, each with different parameters. This allows flexibility when creating objects.
+
+```java
+public Circle(double radius) {
+    this(radius, 0.0); // Calls another constructor
+}
+```
+
+### Constructor Chaining:
+A constructor can call another constructor in the same class using `this()`.
+
+```java
+public Circle() {
+    this(1.0); // Calls the constructor with one parameter
+}
+```
+
+### **When Are Constructors Called?**
+Constructors are automatically invoked when you create an object using the `new` keyword:
+
+```java
+Circle myCircle = new Circle(); // Constructor is called
+```
+
+### **Method Overloading in Java**
+
+**Method overloading** occurs when multiple methods in a class have the **same name** but differ in their **method signature**, which can be based on:
+
+- **Number of arguments**
+- **Type of arguments**
+- **Order of arguments**
+
+### Key Points:
+- **Polymorphism**: Overloading is a form of polymorphism, allowing methods to behave differently depending on the arguments passed.
+- **Overloaded Methods**: Methods can have the same name but different signatures (argument types and/or counts).
+
+### Example:
+
+```java
+class MathOperations {
+    // Method to add two integers
+    public int add(int a, int b) {
+        return a + b;
+    }
+
+    // Overloaded method to add three integers
+    public int add(int a, int b, int c) {
+        return a + b + c;
+    }
+
+    // Overloaded method to add two double values
+    public double add(double a, double b) {
+        return a + b;
+    }
+}
+```
+
+### Explanation:
+- **Method Overloading**: The `add()` method is overloaded with different argument types and numbers.
+- **Polymorphism**: When you call `add()`, Java will select the appropriate method based on the number and type of arguments.
+
+### Example Usage:
+```java
+MathOperations math = new MathOperations();
+System.out.println(math.add(2, 3)); // Uses add(int, int)
+System.out.println(math.add(2, 3, 4)); // Uses add(int, int, int)
+System.out.println(math.add(2.5, 3.5)); // Uses add(double, double)
+```
+
+### **Method Overloading & Polymorphism**:
+- **Polymorphism** allows Java to decide which method to call based on the arguments passed, making the code flexible and reusable.
+
+## 7. Static Attributes and Methods
+
+### **Static Variables and Methods in Java**
+
+**Static Variables**:
+- **Shared Among All Objects**: A static variable is **shared by all instances** of a class, meaning there is only one copy of it, regardless of how many objects are created.
+- **Class-Level Data**: They belong to the **class** rather than any particular object.
+- **Usage Example**: Tracking the number of objects created from a class.
+
+#### Example of Static Variable:
+```java
+class Circle {
+    public double centreX;
+    public double centreY;
+    public double radius;
+
+    // Static variable to count the number of Circle objects created
+    public static int numCircles = 0;
+
+    public Circle(double centreX, double centreY, double radius) {
+        this.centreX = centreX;
+        this.centreY = centreY;
+        this.radius = radius;
+        numCircles++;  // Increment the static variable each time a Circle object is created
+    }
+}
+```
+
+#### Accessing Static Variables:
+```java
+Circle c1 = new Circle(0, 0, 5);
+Circle c2 = new Circle(1, 1, 3);
+
+System.out.println(Circle.numCircles);  // Output: 2 (number of Circle objects created)
+```
+
+### **Static Methods**:
+- **Can Only Access Static Variables**: Static methods can **only access other static methods and static variables** within the class.
+- **No `this` or `super`**: Static methods cannot use **`this`** or **`super`** because they are tied to **specific object instances**, while static methods belong to the class itself.
+  
+#### Example of Static Method:
+```java
+class Circle {
+    public double centreX;
+    public double centreY;
+    public double radius;
+
+    public static int numCircles = 0;
+
+    public Circle(double centreX, double centreY, double radius) {
+        this.centreX = centreX;
+        this.centreY = centreY;
+        this.radius = radius;
+        numCircles++;
+    }
+
+    // Static method to return the number of created Circle objects
+    public static int getNumCircles() {
+        return numCircles;
+    }
+}
+```
+
+#### Accessing Static Methods:
+```java
+Circle c1 = new Circle(0, 0, 5);
+Circle c2 = new Circle(1, 1, 3);
+
+System.out.println(Circle.getNumCircles());  // Output: 2 (number of Circle objects created)
+```
+
+### **Important Notes**:
+- **Instance Variables**: Each object gets its own copy (e.g., `centreX`, `centreY`, `radius` for each Circle).
+- **Static Variables**: Only one copy for the entire class (e.g., `numCircles` for all Circle objects).
+- **Static Methods**: They can only interact with static data (class-level data) and should not interact with instance-specific data.
+
+### **Avoid Overuse of Static Members**:
+- **Good OO Practices**: Avoid making everything static in your classes. Doing so could lead to procedural programming instead of using Object-Oriented principles.
+
+## 8. Standard Methods in Java
+### **Standard Methods in Java**
+
+In Java, there are a few standard methods commonly used to manage objects. These include `equals`, `toString`, and the **copy constructor**. Let’s take a look at each.
+
+---
+
+### **1. `equals` Method**
+- **Purpose**: The `equals` method is used to compare two objects for equality.
+- **Note**: Using the `==` operator compares **object references** (whether both refer to the same memory address), whereas `equals` compares the **contents** of the objects.
+  
+#### Basic `equals` Method:
+```java
+public boolean equals(Circle other) {
+    return this.centreX == other.centreX && 
+           this.centreY == other.centreY && 
+           this.radius == other.radius;
+}
+```
+- **Explanation**: Here, we compare the attributes of two `Circle` objects (`this` and `other`). The method returns `true` if the attributes are equal.
+
+---
+
+### **2. `toString` Method**
+- **Purpose**: This method provides a **string representation** of an object, which is useful when you want to print out the details of an object.
+- **Automatic Call**: The `toString` method is **automatically called** when an object is printed using `System.out.println()`.
+  
+#### Example of `toString` Method:
+```java
+public String toString() {
+    return "Circle: [Centre: (" + centreX + ", " + centreY + "), Radius: " + radius + "]";
+}
+```
+- **Explanation**: This `toString` method returns a string describing the `Circle` object’s state. When `System.out.println(c_1)` is called, it will display the circle’s details.
+
+---
+
+### **3. Copy Constructor**
+- **Purpose**: The copy constructor creates a **new object** as a **copy** of an existing object. This can be used for creating a **deep copy**, ensuring that the copied object is a new instance and not just a reference to the original.
+- **Usage**: It’s useful when you want to clone an object and ensure that references to other objects (within the original object) are also copied.
+
+#### Example of Copy Constructor:
+```java
+public Circle(Circle other) {
+    this.centreX = other.centreX;
+    this.centreY = other.centreY;
+    this.radius = other.radius;
+}
+```
+- **Explanation**: The copy constructor takes another `Circle` object as a parameter and copies its values to create a new `Circle` instance. 
+
+#### Deep Copy (for objects with references):
+If any instance variables are references to other objects, ensure a **deep copy** by calling the copy constructor on those referenced objects:
+
+```java
+public Circle(Circle other) {
+    this.centreX = other.centreX;
+    this.centreY = other.centreY;
+    this.radius = other.radius;
+    // Assuming there's a reference to another object
+    this.anotherObject = new SomeClass(other.anotherObject);  // Deep copy
+}
+```
+- **Explanation**: For non-primitive types (like `anotherObject`), you ensure that the referenced object is also copied, rather than just copying the reference.
+
+---
+
+### **Summary:**
+- **`equals`**: Used to compare two objects based on their attributes.
+- **`toString`**: Provides a string representation of an object, often used for easy printing.
+- **Copy Constructor**: Creates a new object by copying the attributes of another, ensuring that both objects are independent (deep copy if necessary).
+
+## 9. Array Initialization and Assignment
+### **Array Declaration and Initialization**
+
+- **Array Declaration**:
+  - `basetype[] varName;` or `basetype varName[];`
+  - This declares an array where each element is of type `basetype`.
+
+#### Example:
+```java
+int[] intArray; // Declares an array of integers
+```
+
+- **Array Initialization**:
+  - `int[] intArray_1 = {0, 1, 2, 3, 4};`
+  - This initializes an array with values `{0, 1, 2, 3, 4}`.
+  - The number of elements is 5, and the values are the ones specified.
+
+#### Example:
+```java
+int[] intArray_1 = {0, 1, 2, 3, 4};  // 5 elements: 0, 1, 2, 3, 4
+```
+
+- **Array with a predefined size**:
+  - `int[] intArray_2 = new int[100];`
+  - This creates an array of 100 elements, all initialized to `0` (default value for integers).
+  
+#### Example:
+```java
+int[] intArray_2 = new int[100]; // 100 elements, all initialized to 0
+```
+
+- **Array Assignment**:
+  - You can assign one array to another. The second array will point to the same object as the first.
+  
+#### Example:
+```java
+int[] intArray_1 = new int[n];
+int[] intArray_2 = intArray_1;  // intArray_2 now points to the same array as intArray_1
+```
+
+---
+
+### **Arrays for Objects**
+- Arrays can store objects. For example, an array of `Circle` objects can be declared and allocated as follows:
+
+#### Example:
+```java
+Circle[] circleArray;         // Declaration of an array of Circle objects
+circleArray = new Circle[25]; // Allocation of storage for 25 Circle objects
+```
+- **Note**: The array can store **references** to `Circle` objects, but the objects themselves aren't created yet. You need to instantiate them individually.
+
+#### Example of creating and storing objects:
+```java
+for (int i = 0; i < 25; i++) {
+    circleArray[i] = new Circle(); // Creating and storing individual Circle objects
+}
+```
+
+## 10. Strings
+
+### **Strings in Java**
+
+- **String Definition**:
+  - `String` is a class in Java used to represent sequences of characters. It’s commonly used for messages, errors, and attributes like names.
+
+#### Example:
+```java
+String greeting = "Hello, World!";
+```
+
+- **Escaping Special Characters**:
+  - Special characters such as double quotes `"` or backslashes `\` are "escaped" using the backslash (`\`) character.
+
+#### Example:
+```java
+System.out.println("Game of Thrones season 8 was \"good\".");
+```
+
+- **String Operations** ### **String Operations**:
+  - You can concatenate strings using the `+` operator.
+
+#### Example:
+```java
+String name = "Alice";
+System.out.println("Hello " + name);  // Outputs: Hello Alice
+```
+
+- **Immutability of Strings**:
+  - Strings are immutable in Java, meaning once created, their value cannot be changed. Every string operation creates a new string.
+
+#### Example:
+```java
+String str = "Hello";
+str = str + " World";  // A new string "Hello World" is created
+```
+---
+
+### **Summary**:
+- **Array Declaration**: Arrays are declared with the type followed by `[]`. They can be initialized either with specific values or a size.
+- **Objects in Arrays**: Arrays can store references to objects (e.g., `Circle[]`), but objects must be created and stored in the array.
+- **Strings**: Strings are sequences of characters in Java, and you can perform operations like concatenation using `+`. They are immutable, meaning any operation on a string creates a new one.
+
+## 11. Introducing Java Packages, Information Hiding
+
+### **Packages in Java**
+
+#### **What is a Package?**
+- **Package**: A mechanism for grouping classes and interfaces into bundles, making it easier to manage and organize code.
+- It allows classes to be grouped based on their functionality and can be imported into other programs.
+  
+#### **Benefits of Using Packages:**
+1. **Code Reusability**: You can reuse pre-built classes from packages rather than re-writing code.
+2. **Preventing Naming Conflicts**: Classes with the same name can exist in different packages without conflict. By specifying the package, you uniquely identify the class.
+3. **Organization**: Grouping related classes together, making code more manageable and understandable.
+
+#### **Creating a Package**:
+- To place a class in a specific package, you must include the `package` statement at the top of the Java file.
+
+#### **Syntax**:
+```java
+package <directory_name_1>.<directory_name_2>;
+```
+- This defines the package structure where `directory_name_2` is a sub-directory of `directory_name_1`.
+
+#### **Example**:
+```java
+package com.example.utils;
+
+public class MyClass {
+    // Class content here
+}
+```
+- In this case, the class `MyClass` is placed in the package `com.example.utils`.
+
+#### **Why Use Packages?**
+- **Modularity**: Keep related classes together.
+- **Access Control**: Packages help with organizing classes and controlling access.
+- **Namespace Management**: Avoid naming conflicts by distinguishing classes with the package name.
+
+### **Information Hiding**
+
+**Information Hiding** (also known as **Visibility Control**) is a key principle in object-oriented design that limits the access to the internal workings of an object. This principle is closely tied to **Encapsulation**, which involves grouping related attributes and methods together in a class.
+
+### **What is Information Hiding?**
+- Information Hiding allows restricting access to some parts of a class (such as its attributes and methods) to ensure that only the necessary details are exposed to the user.
+- Users interact with objects via **public interfaces** (methods), but they cannot directly manipulate the internal state or attributes of the object.
+
+### **Visibility Modifiers in Java**
+Visibility modifiers control the visibility of class members (attributes and methods) and determine where they can be accessed from. The common visibility modifiers are:
+
+| Modifier    | Class | Package | Subclass | Outside |
+|-------------|-------|---------|----------|---------|
+| **public**  | Y     | Y       | Y        | Y       |
+| **protected**| Y    | Y       | Y        | N       |
+| **default** | Y     | Y       | N        | N       |
+| **private** | Y     | N       | N        | N       |
+
+### **Explanation of Modifiers:**
+1. **public**: 
+   - Accessible from anywhere: within the class, package, subclass, and from outside the package.
+   
+2. **protected**: 
+   - Accessible within the class, package, and subclass (even outside the package if subclassed). Not accessible from outside if it's not subclassed.
+   
+3. **default** (no modifier):
+   - Accessible only within the same package. Not accessible outside the package or in subclasses from other packages.
+   
+4. **private**: 
+   - Accessible only within the class. It cannot be accessed from outside the class, even by subclasses.
+
+### **Benefits of Information Hiding:**
+- **Security**: Prevents unauthorized access or modification of critical data.
+- **Maintainability**: Reduces complexity by hiding implementation details, allowing changes without affecting external code.
+- **Modularity**: Enables better organization by restricting access to internal workings and providing a clear interface for interaction.
+
+## 12. Delegation through Association
+
+**Delegation** is a design pattern in object-oriented programming where a class hands off (or delegates) certain responsibilities or tasks to another class. Instead of performing a task itself, the class relies on another object to carry out the task.
+
+### **Example of Delegation**:
+```java
+// Class A delegates the responsibility to Class B
+class A {
+    private B b;  // Object of class B is contained in A
+
+    public A() {
+        b = new B(); // Create the object of B
+    }
+
+    // Delegating the responsibility of action to class B
+    public void performAction() {
+        b.executeTask();  // Delegation of task to B's method
+    }
+}
+
+class B {
+    // This is the method that Class A delegates to
+    public void executeTask() {
+        System.out.println("Task executed by B");
+    }
+}
+```
+
+### **Benefits of Delegation**:
+- **Composition over inheritance**: Delegation allows creating flexible systems without relying on complex inheritance structures.
+- **Loose coupling**: Classes are not tightly coupled to one another, making the system easier to maintain and extend.
+- **Reuse of code**: By delegating tasks to existing classes, you can reuse functionality without duplicating code.
+
+### **Conclusion**:
+Delegation is a powerful pattern that promotes flexibility, code reuse, and modularity. It allows objects to collaborate without becoming tightly dependent on one another.
+
+## 13. Wrapper Classes
+### **Wrapper Classes in Java**
+
+Java provides **wrapper classes** for each of the primitive data types. These classes allow primitive data types to be treated as objects. They "wrap" the primitive value inside an object, giving it the ability to behave like an object and offering additional functionality.
+
+### **Why Wrapper Classes Are Useful:**
+1. **Object Behavior**: Primitives are not objects, so they cannot be used in certain situations where objects are required (e.g., working with collections like `ArrayList`, which can only store objects). Wrapper classes allow primitives to be used in such scenarios.
+2. **Extra Functionality**: Wrapper classes provide useful methods for converting, comparing, or manipulating primitive data types as objects.
+3. **Autoboxing and Unboxing**: Java automatically converts between primitives and their corresponding wrapper objects (autoboxing and unboxing), making it easier to work with collections and other APIs that require objects.
+
+### **Primitive Types and Their Wrapper Classes**:
+
+| Primitive Type | Wrapper Class |
+|----------------|---------------|
+| `boolean`      | `Boolean`     |
+| `byte`         | `Byte`        |
+| `char`         | `Character`   |
+| `int`          | `Integer`     |
+| `float`        | `Float`       |
+| `double`       | `Double`      |
+| `long`         | `Long`        |
+| `short`        | `Short`       |
+
+### **Example**: Using Wrapper Classes
+```java
+// Using wrapper class Integer
+Integer num = new Integer(10);
+
+// Autoboxing: primitive int to Integer object
+Integer num2 = 5;
+
+// Unboxing: Integer object to primitive int
+int value = num2;  // Automatically converts to int
+
+// Using methods of wrapper class
+int max = Integer.MAX_VALUE;
+System.out.println("Maximum int value: " + max);
+```
+
+### **Key Methods Provided by Wrapper Classes**:
+- **Parsing**: Convert string representations to primitive types.
+  - `Integer.parseInt("123");`
+  - `Double.parseDouble("3.14");`
+- **Converting to Strings**: Convert primitive types or wrapper objects to strings.
+  - `Integer.toString(123);`
+  - `String.valueOf(true);`
+- **Constants**: Many wrapper classes provide constants for maximum and minimum values, such as `Integer.MAX_VALUE` or `Double.MIN_VALUE`.
+
+### **Autoboxing and Unboxing Example**:
+```java
+// Autoboxing: automatic conversion from primitive to object
+Integer myInteger = 10;
+
+// Unboxing: automatic conversion from object to primitive
+int myInt = myInteger; // Integer to int
+```
+
+## 14. Input/Output
+
+### **Console Input**
+Reading input from the console involves using classes from the `java.util` package, such as `Scanner`.
+
+#### Example:
+```java
+import java.util.Scanner;
+
+public class InputExample {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        System.out.print("Enter a number: ");
+        int num = scanner.nextInt();
+        
+        System.out.println("You entered: " + num);
+    }
+}
+```
+
+### **File Writing**
+Writing to a file involves using classes from the `java.io` package, such as `FileWriter` and `BufferedWriter`.
+
+#### Example:
+```java
+import java.io.FileWriter;
+import java.io.IOException;
+
+public class WriteFile {
+    public static void main(String[] args) {
+        try {
+            FileWriter writer = new FileWriter("output.txt");
+            writer.write("Hello, File!");
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+---

@@ -1044,7 +1044,7 @@ for (int i = 0; i < 25; i++) {
 }
 ```
 
-## 4.3 Enum
+## 4.3 **Enum**
 
 **Keyword: `enum`** – A class that consists of a **finite list of constants**.
 
@@ -1069,11 +1069,20 @@ public enum Rank {
 #### And a **Card class** that uses this enum
 
 ```java
+public enum Rank {
+    ACE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING;
+}
+
 public class Card {
     private Rank rank;
 
     public Card(Rank rank) {
         this.rank = rank;
+    }
+
+    public Card() {
+        // this.rank = Rank.ACE
+        this(Rank.ACE);
     }
 
     public Rank getRank() {
